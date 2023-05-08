@@ -104,7 +104,7 @@ do
     }
 
     //vuelvo a leer el valor de opcion para realizar una nueva accion
-    Opcion = parseInt(prompt(`Hola ${Usuario}, estas son las operaciones que se pueden realizar\n 
+    Opcion = parseInt(prompt(`${Usuario}, podes realizar otra operacion o salir.\n 
                             Selecciona la operacion que desees.\n
                             ${Operacion1.numero} - ${Operacion1.descripcion}
                             ${Operacion2.numero} - ${Operacion2.descripcion}
