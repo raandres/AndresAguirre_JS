@@ -1,130 +1,127 @@
 //*****************************************************************
-// Definicion de la estructura de operaciones
+// Funcion para validacion de numero ingresado
+// Si se ingresa un valor distinto a un numero vuelve a pedirlo
 
-class Operacion{
-    constructor (numero, descripcion){
-        this.numero = numero,
-        this.descripcion = descripcion
+function validarNumero(numero,mensaje)
+{
+	while(isNaN(numero))
+	{
+			alert("Ingreso un valor incorrecto, reintente")
+			numero = parseInt(prompt(mensaje)); //asigna a numero el valor ingresado por teclado
+	}
+	return numero;
+}
+//*****************************************************************
+
+//*****************************************************************
+// Funcion para mostrar productos en stock
+// Si se ingresa un producto con stock 0 pide ingresar otro
+function mensajeBienvenida ()
+{
+	let mensajePresentacion = "Productos disponibles: \n Ingrese el numero del producto que desea \n";
+
+	PRODUCTOS.forEach(e => {
+		mensajePresentacion += `${e.id} - ${e.descripcion} - Stock: ${e.stock} - Precio: ${e.precio}\n`
+	}) //Agrega a mensajePresentacion la lista de productos
+
+	let respuestaUser = parseInt(prompt(mensajePresentacion))
+	respuestaUser = validarNumero(respuestaUser,mensajePresentacion); //Verifica el numero ingresado
+
+	let productoSeleccionado = PRODUCTOS.find(elem => elem.id === respuestaUser);
+	
+	while(productoSeleccionado.stock === 0) //Comprueba el stock del producto elegido
+	{
+		alert("El producto seleccionado no posee stock por el momento, por favor seleccione otro")
+		respuestaUser = parseInt(prompt(mensajePresentacion))
+		respuestaUser = validarNumero(respuestaUser,mensajePresentacion);
+		productoSeleccionado = PRODUCTOS.find(elem => elem.id === respuestaUser);
+	}
+	return productoSeleccionado;
+}
+//*****************************************************************
+
+//*****************************************************************
+// Funcion para modificar stock, sumar precios y cantidades
+function ingresarCantidad(producto)
+{
+	let precio = 0;
+	cantidadUser = parseInt(prompt(`Ingrese la cantidad de ${producto.descripcion} que desea`))
+	cantidadUser = validarNumero(cantidadUser, cantidadUser);
+	while(producto.stock < cantidadUser) //Comprueba si la cantidad deseada es mayor que el stock disponible
+	{
+		alert("Hay un problema, queres mas de lo que hay :)")
+		cantidadUser = parseInt(prompt(`Ingrese la cantidad de ${producto.descripcion} que desea`))
+		cantidadUser = validarNumero(cantidadUser, cantidadUser);
+	}
+	producto.stock -= cantidadUser;
+	producto.carrito += cantidadUser;
+	producto.cantidad += cantidadUser;
+	return producto.precio * cantidadUser;
+}
+//*****************************************************************
+
+//*****************************************************************
+// Estructura de productos
+class Producto{
+    constructor (id, descripcion, stock, precio, carrito){
+        this.id = id,
+        this.descripcion = descripcion,
+		this.stock = stock,
+		this.precio = precio,
+		this.carrito = carrito,
+		this.cantidad = []
     }
 }
-
-
-const Operacion1 = new Operacion(1, "Suma");
-const Operacion2 = new Operacion(2, "Resta");
-const Operacion3 = new Operacion(3, "Multiplicacion");
-const Operacion4 = new Operacion(4, "Division");
-let resultado = 0;
-//*****************************************************************
-
-
-
-//*****************************************************************
-// Definicion de funciones matemáticas
-
-function sumar(numero1, numero2)
-{
-    resultado = numero1 + numero2;
-    alert (`El resultado de la suma es ${resultado}`);
-}
-
-function restar(numero1, numero2)
-{
-    resultado = numero1 - numero2;
-    alert (`El resultado de la resta es ${resultado}`);
-}
-
-function multiplicar(numero1, numero2)
-{
-    resultado = numero1 * numero2;
-    alert (`El resultado de la multiplicación es ${resultado}`);
-}
-
-function dividir(numero1, numero2)
-{
-    while(numero2 == 0) //se pide ingresar un nuevo valor para numero2 hasta que sea distinto de 0
-    {
-        numero2 = parseInt(prompt(`La division que desea realizar no es posible, por favor ingrese otro numero distinto de cero`));
-    }
-    resultado = numero1 / numero2;
-    alert (`El resultado de la división es ${resultado}`);
-}
 //*****************************************************************
 
 
 //*****************************************************************
-//Funcion para lectura de datos
-function IngresarNumero()
+// Definicion de los productos a mostrar
+const producto1 = new Producto(1, "Galletas",0,1);
+const producto2 = new Producto(2, "Yerba",10,2);
+const producto3 = new Producto(3, "Azucar",10,3);
+const producto4 = new Producto(4, "Te",10,4);
+const producto5 = new Producto(5, "Arroz",10,5);
+//*****************************************************************
+
+const PRODUCTOS = [producto1,producto2,producto3,producto4,producto5];
+
+let continuar = true;
+let precioTotal = 0;
+let cantidadTotal = 0;
+let productosSeleccionados = [];
+let cantidadUser = 0;
+
+
+//*****************************************************************
+// Ciclo de programa principal
+while (continuar)
 {
-    numero1 = parseInt(prompt(`Ingresa el primer número`));
-    numero2 = parseInt(prompt(`Ingresa el segundo número`));
+
+	const productoSeleccionado = mensajeBienvenida();
+	const precioProducto = ingresarCantidad(productoSeleccionado);
+	
+	precioTotal += precioProducto;
+	cantidadTotal += cantidadUser;
+	productosSeleccionados.push(productoSeleccionado);
+		
+	const opcionContinuar = prompt("Desea continuar? Si/No").toLowerCase();
+	if(opcionContinuar !== "si" && opcionContinuar !== "sí") //Por cada iteracion pregunta si desea continuar
+	{
+		continuar = false;
+	}
+		
 }
 //*****************************************************************
 
 //*****************************************************************
-// Definicion de variables
-let numero1 = 0;
-let numero2 = 0;
-let cuenta = 0;
+//Resumen de compras realizadas
+let resumen1 = "Resumen de la seleccion: \n ------------------------------\nProductos seleccionados: \n";
+
+productosSeleccionados.forEach(producto => {
+		resumen1 += `- ${producto.descripcion}: $${producto.precio} x ${producto.cantidad} unidades\n`	});
+		
+resumen1 += `-------------------------------\nCantidad total de productos: ${cantidadTotal}\nPrecio total de productos: $${precioTotal}`
+
+alert(resumen1);
 //*****************************************************************
-
-let Usuario = prompt (`Ingrese su nombre`);
-
-let Opcion = parseInt(prompt(`Hola ${Usuario}, estas son las operaciones que se pueden realizar\n 
-                            Selecciona la operacion que desees.\n
-                            ${Operacion1.numero} - ${Operacion1.descripcion}
-                            ${Operacion2.numero} - ${Operacion2.descripcion}
-                            ${Operacion3.numero} - ${Operacion3.descripcion}
-                            ${Operacion4.numero} - ${Operacion4.descripcion}
-                            Para salir ingresar la opcion 0\n`));
-
-do
-{
-    switch(Opcion)
-    {
-        case 0:
-            continue;
-        case 1:
-            IngresarNumero()
-            sumar(numero1, numero2)
-            break;
-        case 2:
-            IngresarNumero()
-            restar(numero1, numero2)
-            break;
-        case 3:
-            IngresarNumero()
-            multiplicar(numero1, numero2)
-            break;
-        case 4:
-            IngresarNumero()
-            dividir(numero1, numero2)
-            break;
-        default:
-            alert("El numero seleccionado no coincide con una operacion.")
-    }
-
-    //vuelvo a leer el valor de opcion para realizar una nueva accion
-    Opcion = parseInt(prompt(`${Usuario}, podes realizar otra operacion o salir.\n 
-                            Selecciona la operacion que desees.\n
-                            ${Operacion1.numero} - ${Operacion1.descripcion}
-                            ${Operacion2.numero} - ${Operacion2.descripcion}
-                            ${Operacion3.numero} - ${Operacion3.descripcion}
-                            ${Operacion4.numero} - ${Operacion4.descripcion}
-                            Para salir ingresar la opcion 0\n`));
-
-    cuenta+=1; //cuenta la cantidad de operaciones realizadas
-    //console.log(cuenta); //muestra en consola la variables cuenta
-}while(Opcion != 0); //el do while corre mientras opcion es distinto de 0
-
-if(cuenta == 0) //muestra una alerta cuando no se realizaron operaciones
-{
-    alert(`No se realizó ninguna operación`);
-}
-if (cuenta == 1) //muestra una alerta cuando se realizo 1 operacion
-{
-    alert(`Se realizó solo 1 operación`);
-}
-if (cuenta >= 2) //muestra una alerta cuando se realizaron x operaciones
-{
-    alert(`Se realizaron ${cuenta} operaciones`);
-}
