@@ -1,0 +1,431 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+@font-face {
+  font-family: "coffee";
+  src: url("../fuente/Coffee.ttf");
+}
+/* ESTILOS GENERALES */
+header {
+  width: 100%;
+  height: 400px;
+  background-image: url(../img/fondo-pantalla-hilo-tejer.jpg);
+  background-position: 0;
+  background-size: cover;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 400px;
+  background-color: #ffffff;
+  opacity: 0.5;
+}
+header h1 {
+  color: rgb(139, 128, 112);
+  z-index: 1;
+}
+
+.texto {
+  font-size: 20px;
+  padding: 10px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.texto-encabezado {
+  font-size: 3em;
+  font-family: coffee;
+  padding: 10px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.autor {
+  padding: 20px;
+  font-size: 25px;
+  text-align: right;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.menu {
+  background-color: rgb(202, 175, 124);
+  display: flexbox;
+  height: 50px;
+  align-items: center;
+  justify-content: space-around;
+  text-align: right;
+  font-size: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.menu ul {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+.menu ul .nav-item {
+  display: inline-block;
+  padding: 10px 20px;
+}
+.menu ul .nav-item a {
+  height: 100%;
+  color: white;
+  /* border: 2px black solid; */
+}
+.menu ul .nav-item a:hover {
+  background-color: rgb(163, 129, 83);
+}
+.menu ul .nav-item .active {
+  background-color: rgb(202, 175, 124);
+  padding: 10px;
+}
+
+#check-menu, label.menu_oculto {
+  display: none;
+}
+
+.main-index {
+  margin: 20px;
+  justify-content: center;
+  display: flex;
+  /* position: relative; */
+}
+
+.galeria {
+  display: flex;
+  width: 90%;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin-top: 20px;
+  margin-bottom: 100px;
+  flex-wrap: wrap;
+  height: auto;
+}
+.galeria .card {
+  width: 250px;
+  height: auto;
+  border-radius: 10px;
+  margin: 20px;
+}
+.galeria .card .imagen-index {
+  position: relative;
+  width: 100%;
+}
+.galeria .card .imagen-index img {
+  width: 100%;
+}
+.galeria .card .imagen-index img:hover {
+  opacity: 0.75;
+}
+.galeria .card .pie_card {
+  width: 100%;
+  text-align: center;
+  border-radius: 0 0 10px 10px;
+}
+
+/*FOOTER*/
+.pie {
+  width: 100%;
+  height: 300px;
+  position: absolute;
+  background-image: url(../img/hilado-rojo.jpg);
+  background-position: 0;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 0;
+}
+.pie::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  opacity: 0.5;
+}
+.pie .logo {
+  z-index: 1;
+}
+.pie .logo img {
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.pie .footer-texto {
+  font-size: 1.3em;
+  z-index: 1;
+}
+.pie .footer-texto-mail {
+  font-size: 1.3em;
+  z-index: 1;
+}
+
+
+
+/* ESTILOS PRODUCTOS */
+
+.seleccion-productos {
+  display: flex;
+  width: 90%;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+  height: auto;
+}
+.seleccion-productos .titulo-seccion {
+  text-align: center;
+  margin: 10px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.card .titulo{
+  font-weight: bold;
+  font-size: 20px;
+}
+.seleccion-productos .card {
+  margin-bottom: 20px;
+}
+.seleccion-productos .card .imagen {
+  position: relative;
+  width: 100%;
+}
+.seleccion-productos .card .imagen img {
+  width: 100%;
+}
+.seleccion-productos .card .pie_card_prod {
+  background-color: rgb(87, 165, 35);
+  width: 100%;
+  text-align: center;
+  border-radius: 0 0 5px 5px;
+  font-weight: bold;
+  color: white;
+}
+
+
+
+/* MEDIA QUERIES*/
+@media screen and (max-width: 768px) {
+  header {
+    width: 100%;
+    height: 400px;
+    background-image: url(../img/fondo-pantalla-hilo-tejer.jpg);
+    background-position: 0;
+    background-size: cover;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  header .texto {
+    font-size: 1.3em;
+    padding: 10px;
+    font-weight: bold;
+    z-index: 1;
+  }
+  header .autor {
+    padding: 1.3em;
+    font-size: 25px;
+    text-align: right;
+    font-weight: bold;
+    z-index: 1;
+  }
+  header h1 {
+    font-size: 1.8em;
+  }
+  .menu {
+    font-size: 1.3em;
+  }
+  .menu ul {
+    display: none;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    background-color: rgb(202, 175, 124);
+    justify-content: space-around;
+    font-size: 0.8em;
+  }
+  label.menu_oculto {
+    display: block;
+    font-size: 1.7em;
+    color: #f3f7f6;
+    cursor: pointer;
+  }
+  #check-menu:checked ~ ul {
+    display: block;
+  }
+  .logo {
+    z-index: 1;
+  }
+  .pie .footer-texto {
+    font-size: 0.9em;
+  }
+  .pie .footer-texto-mail {
+    font-size: 0.9em;
+    z-index: 1;
+  }
+  
+}
+@media screen and (max-width: 576px) {
+  header {
+    width: 100%;
+    height: 400px;
+    background-image: url(../img/fondo-pantalla-hilo-tejer.jpg);
+    background-position: 0;
+    background-size: cover;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  header .texto {
+    font-size: 1.2em;
+    padding: 10px;
+    font-weight: bold;
+    z-index: 1;
+  }
+  header .autor {
+    padding: 1.2em;
+    font-size: 1.2em;
+    text-align: right;
+    font-weight: bold;
+    z-index: 1;
+  }
+  header h1 {
+    font-size: 1.5em;
+  }
+  .menu {
+    font-size: 1.3em;
+  }
+  .menu ul {
+    display: none;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    background-color: rgb(202, 175, 124);
+    justify-content: space-around;
+    font-size: 0.8em;
+  }
+  label.menu_oculto {
+    display: block;
+    font-size: 1.7em;
+    color: #f3f7f6;
+    cursor: pointer;
+  }
+  #check-menu:checked ~ ul {
+    display: block;
+  }
+  .logo {
+    z-index: 1;
+  }
+  .pie .footer-texto {
+    font-size: 0.8em;
+  }
+  .pie .footer-texto-mail {
+    font-size: 0.8em;
+    z-index: 1;
+  }
+ 
+}
+@media screen and (max-width: 480px) {
+  header {
+    width: 100%;
+    height: 350px;
+    background-image: url(../img/fondo-pantalla-hilo-tejer.jpg);
+    background-position: 0;
+    background-size: cover;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  header .texto {
+    font-size: 1em;
+    padding: 10px;
+    font-weight: bold;
+    z-index: 1;
+  }
+  header .autor {
+    padding: 1em;
+    font-size: 1.2em;
+    text-align: right;
+    font-weight: bold;
+    z-index: 1;
+  }
+  header h1 {
+    font-size: 1.3em;
+  }
+  .menu {
+    font-size: 1em;
+  }
+  .menu ul {
+    display: none;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    background-color: rgb(202, 175, 124);
+    justify-content: space-around;
+    font-size: 0.8em;
+  }
+  label.menu_oculto {
+    display: block;
+    font-size: 1.7em;
+    color: #f3f7f6;
+    cursor: pointer;
+  }
+  #check-menu:checked ~ ul {
+    display: block;
+  }
+  .logo {
+    z-index: 1;
+  }
+  .logo img {
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pie .footer-texto {
+    font-size: 0.6em;
+  }
+  .pie .footer-texto-mail {
+    font-size: 0.5em;
+    z-index: 1;
+  }
+ 
+}
+
+/*# sourceMappingURL=style.css.map */
