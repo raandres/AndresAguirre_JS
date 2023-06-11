@@ -1,201 +1,146 @@
-//*****************************************************************
-// Estructura de productos
-class Producto{
-    constructor (id, descripcion, stock, precio, carrito){
-        this.id = id,
-        this.descripcion = descripcion,
-		this.stock = stock,
-		this.precio = precio,
-		this.carrito = carrito,
-		this.cantidad = []
-    }
-}
-//*****************************************************************
+// Variable para almacenar el carrito de compras
+let carrito = [];
 
-
-//*****************************************************************
-// Definicion de los productos a mostrar
-const producto1 = new Producto(1, "Galletas",0,1);
-const producto2 = new Producto(2, "Yerba",10,2);
-const producto3 = new Producto(3, "Azucar",10,3);
-const producto4 = new Producto(4, "Te",10,4);
-const producto5 = new Producto(5, "Arroz",10,5);
-
-const PRODUCTOS = [producto1,producto2,producto3,producto4,producto5];
-//*****************************************************************
-
-//let continuar = true;
-//let precioTotal = 0;
-//let cantidadTotal = 0;
-//let productosSeleccionados = [];
-//let cantidadUser = 0;
-
-
-const cardProductos = document.getElementById("cardProductos");
-cardProductos.className = "row";
-PRODUCTOS.forEach((producto => {
+// Función para renderizar los productos en la página
+function renderizarProductos() {
+  const cardProductos = document.getElementById("cardProductos");
+  cardProductos.className = "row";
+  PRODUCTOS.forEach((producto) => {
     let divCard = document.createElement("div");
-    divCard.className = "col-sm-12 col-md-6 col-lg-4 mx-auto d-flex justify-content-center";
+    divCard.className =
+      "col-sm-12 col-md-6 col-lg-4 mx-auto d-flex justify-content-center";
     divCard.innerHTML = `
-        <div class="card text-center border-danger">
-            <div class="titulo">${producto.descripcion}</div>
-            <div class="imagen"><img src="./img/productos/producto${producto.id}.png" alt="RECIEN NACIDO"></div>
-            <input type="button" class="btn btn-primary pie_card_prod" value="Comprar">
-            
-        </div>
-    `;
-    cardProductos.append(divCard); 
-}));
+      <div class="card text-center border-danger">
+          <div class="titulo">${producto.descripcion}</div>
+          <div class="imagen"><img src="./img/productos/producto${producto.id}.png" alt="RECIEN NACIDO"></div>
+          <button class="btn btn-primary pie_card_prod" onclick="mostrarRecuadroCantidad(${producto.id})">Comprar</button>
+      </div>
+      `;
+    cardProductos.append(divCard);
+  });
+}
 
+// Función para mostrar el resumen del carrito
+function mostrarResumenCarrito() {
+  let resumenHTML = "";
+  let totalPrecios = 0;
+  let totalCantidades = 0;
 
+  // Objeto para almacenar temporalmente las cantidades de cada producto
+  const cantidadesTemp = {};
 
+  // Recorre el carrito y calcula el precio total de cada producto
+  for (const producto of carrito) {
+    const precioTotalProducto = producto.precio * producto.cantidad;
+    totalPrecios += precioTotalProducto;
+    totalCantidades += producto.cantidad;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//*****************************************************************
-// Funcion para validacion de numero ingresado
-// Si se ingresa un valor distinto a un numero vuelve a pedirlo
-/*
-function validarNumero(numero,mensaje)
-{
-	while(isNaN(numero))
-	{
-			alert("Ingreso un valor incorrecto, reintente")
-			numero = parseInt(prompt(mensaje)); //asigna a numero el valor ingresado por teclado
-	}
-	return numero;
-}*/
-//*****************************************************************
-
-//*****************************************************************
-// Funcion para mostrar productos en stock
-// Si se ingresa un producto con stock 0 pide ingresar otro
-/*function mensajeBienvenida ()
-{
-	let mensajePresentacion = "Productos disponibles: \n Ingrese el numero del producto que desea \n";
-
-	PRODUCTOS.forEach(e => {
-		mensajePresentacion += `${e.id} - ${e.descripcion} - Stock: ${e.stock} - Precio: ${e.precio}\n`
-	}) //Agrega a mensajePresentacion la lista de productos
-
-	let respuestaUser = parseInt(prompt(mensajePresentacion))
-	respuestaUser = validarNumero(respuestaUser,mensajePresentacion); //Verifica el numero ingresado
-
-	let productoSeleccionado = PRODUCTOS.find(elem => elem.id === respuestaUser);
-	
-	while(productoSeleccionado.stock === 0) //Comprueba el stock del producto elegido
-	{
-		alert("El producto seleccionado no posee stock por el momento, por favor seleccione otro")
-		respuestaUser = parseInt(prompt(mensajePresentacion))
-		respuestaUser = validarNumero(respuestaUser,mensajePresentacion);
-		productoSeleccionado = PRODUCTOS.find(elem => elem.id === respuestaUser);
-	}
-	return productoSeleccionado;
-}*/
-//*****************************************************************
-
-//*****************************************************************
-// Funcion para modificar stock, sumar precios y cantidades
-/*function ingresarCantidad(producto)
-{
-	let precio = 0;
-	cantidadUser = parseInt(prompt(`Ingrese la cantidad de ${producto.descripcion} que desea`))
-	cantidadUser = validarNumero(cantidadUser, cantidadUser);
-	while(producto.stock < cantidadUser) //Comprueba si la cantidad deseada es mayor que el stock disponible
-	{
-		alert("Hay un problema, queres mas de lo que hay :)")
-		cantidadUser = parseInt(prompt(`Ingrese la cantidad de ${producto.descripcion} que desea`))
-		cantidadUser = validarNumero(cantidadUser, cantidadUser);
-	}
-	producto.stock -= cantidadUser;
-	producto.carrito += cantidadUser;
-	producto.cantidad += cantidadUser;
-	return producto.precio * cantidadUser;
-}*/
-//*****************************************************************
-
-//*****************************************************************
-// Estructura de productos
-/*class Producto{
-    constructor (id, descripcion, stock, precio, carrito){
-        this.id = id,
-        this.descripcion = descripcion,
-		this.stock = stock,
-		this.precio = precio,
-		this.carrito = carrito,
-		this.cantidad = []
+    // Almacena temporalmente la cantidad de cada producto
+    if (producto.id in cantidadesTemp) {
+      cantidadesTemp[producto.id] += producto.cantidad;
+    } else {
+      cantidadesTemp[producto.id] = producto.cantidad;
     }
-}*/
-//*****************************************************************
 
+    // Agrega el HTML del producto al resumen
+    resumenHTML += `
+      <div class="producto-resumen">
+        <span class="nombre-producto">${producto.descripcion}</span>
+        <span class="cantidad-producto">${cantidadesTemp[producto.id]}</span>
+        <span class="precio-producto">$${precioTotalProducto.toFixed(2)}</span>
+      </div>
+    `;
+  }
 
-//*****************************************************************
-// Definicion de los productos a mostrar
-/*const producto1 = new Producto(1, "Galletas",0,1);
-const producto2 = new Producto(2, "Yerba",10,2);
-const producto3 = new Producto(3, "Azucar",10,3);
-const producto4 = new Producto(4, "Te",10,4);
-const producto5 = new Producto(5, "Arroz",10,5);*/
-//*****************************************************************
+  // Agrega el resumen final con los totales al HTML
+  resumenHTML += `
+    <div class="total-resumen">
+      <span>Total</span>
+      <span>${totalCantidades}</span>
+      <span>$${totalPrecios.toFixed(2)}</span>
+    </div>
+  `;
 
-/*const PRODUCTOS = [producto1,producto2,producto3,producto4,producto5];
+  // Actualiza el contenido del elemento HTML con el resumen del carrito
+  const resumenCarritoElement = document.getElementById("resumenCarrito");
+  resumenCarritoElement.innerHTML = resumenHTML;
+}
 
-let continuar = true;
-let precioTotal = 0;
-let cantidadTotal = 0;
-let productosSeleccionados = [];
-let cantidadUser = 0;
-*/
+// Función para agregar un producto al carrito
+function agregarAlCarrito(idProducto) {
+  const producto = PRODUCTOS.find((producto) => producto.id === idProducto);
 
-//*****************************************************************
-// Ciclo de programa principal
-/*while (continuar)
-{
+  if (producto) {
+    const cantidadSeleccionada = document.getElementById("input-cantidad").value;
+    const cantidad = parseInt(cantidadSeleccionada);
 
-	const productoSeleccionado = mensajeBienvenida();
-	const precioProducto = ingresarCantidad(productoSeleccionado);
-	
-	precioTotal += precioProducto;
-	cantidadTotal += cantidadUser;
-	productosSeleccionados.push(productoSeleccionado);
-		
-	const opcionContinuar = prompt("Desea continuar? Si/No").toLowerCase();
-	if(opcionContinuar !== "si" && opcionContinuar !== "sí") //Por cada iteracion pregunta si desea continuar
-	{
-		continuar = false;
-	}
-		
-}*/
-//*****************************************************************
+    if (isNaN(cantidad) || cantidad <= 0) {
+      alert("Por favor, ingrese una cantidad válida.");
+      return;
+    }
 
-//*****************************************************************
-//Resumen de compras realizadas
-/*let resumen1 = "Resumen de la seleccion: \n ------------------------------\nProductos seleccionados: \n";
+    if (cantidad > producto.stock) {
+      alert("No hay suficiente stock disponible.");
+      return;
+    }
 
-productosSeleccionados.forEach(producto => {
-		resumen1 += `- ${producto.descripcion}: $${producto.precio} x ${producto.cantidad} unidades\n`	});
-		
-resumen1 += `-------------------------------\nCantidad total de productos: ${cantidadTotal}\nPrecio total de productos: $${precioTotal}`
+    producto.stock -= cantidad;
 
-alert(resumen1);
-//*****************************************************************
-*/
+    // Busca el producto en el carrito
+    const productoEnCarrito = carrito.find((item) => item.id === idProducto);
+
+    if (productoEnCarrito) {
+      // Actualiza la cantidad del producto en el carrito
+      productoEnCarrito.cantidad += cantidad;
+    } else {
+      // Agrega el producto al carrito
+      producto.cantidad = cantidad;
+      carrito.push(producto);
+    }
+
+    // Ocultar el recuadro de cantidad
+    document.getElementById("cantidad-seleccionada").style.display = "none";
+
+    // Actualizar el resumen del carrito
+    mostrarResumenCarrito();
+  } else {
+    alert("El producto seleccionado no existe.");
+  }
+}
+
+// Función para mostrar el recuadro de cantidad y configurar el botón de agregar al carrito
+function mostrarRecuadroCantidad(idProducto) {
+  const cantidadSeleccionadaElement = document.getElementById("cantidad-seleccionada");
+  const comprarBtn = document.getElementById("btn-agregar-carrito");
+
+  if (cantidadSeleccionadaElement && comprarBtn) {
+    cantidadSeleccionadaElement.style.display = "block";
+    comprarBtn.onclick = function () {
+      agregarAlCarrito(idProducto);
+    };
+  } else {
+    console.error("Elemento no encontrado. Verifica el ID de los elementos HTML.");
+  }
+}
+
+// Estructura de productos
+class Producto {
+  constructor(id, descripcion, stock, precio, carrito) {
+    this.id = id;
+    this.descripcion = descripcion;
+    this.stock = stock;
+    this.precio = precio;
+    this.cantidad = 0;
+  }
+}
+
+// Definición de los productos a mostrar
+const producto1 = new Producto(1, "Vestido 1", 5, 1);
+const producto2 = new Producto(2, "Vestido 2", 5, 1);
+const producto3 = new Producto(3, "Vestido 3", 5, 1);
+const producto4 = new Producto(4, "Vestido 4", 5, 1);
+const producto5 = new Producto(5, "Vestido 5", 5, 1);
+
+const PRODUCTOS = [producto1, producto2, producto3, producto4, producto5];
+
+renderizarProductos();

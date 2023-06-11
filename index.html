@@ -65,9 +65,25 @@
     <!-- <main class="justify-content-center position-relative"> -->
 
         <section class="d-flex flex-column seleccion-productos container-fluid">
-            <div class="titulo-seccion"> <p>RECIEN NACIDO</p></div>
+            <div class="titulo-seccion">
+              <p>RECIEN NACIDO</p>
+            </div>
             <div id="cardProductos"></div>
-        </section>
+          </section>
+          
+          <div id="cantidad-seleccionada" style="display: none;">
+            <input type="number" id="input-cantidad" min="1" placeholder="Cantidad">
+            <button id="btn-agregar-carrito" class="btn btn-primary">Agregar al carrito</button>
+          </div>
+          
+          <div id="cantidades"></div>
+          
+          <div id="resumenCarrito"></div>
+
+          <!-- <div id="totalCarrito" class="total-resumen">
+            <span>Total del carrito:</span>
+            <span>$0.00</span>
+          </div> -->
 
     <!-- </main> -->
     <!-- MAIN -->
