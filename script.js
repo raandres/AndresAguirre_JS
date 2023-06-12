@@ -1,7 +1,7 @@
-// Variable para almacenar el carrito de compras
+// Almacena el carrito de compras
 let carrito = [];
 
-// Función para renderizar los productos en la página
+// Funcion para mostrar los productos en la pagina
 function renderizarProductos() {
   const cardProductos = document.getElementById("cardProductos");
   cardProductos.className = "row";
@@ -20,13 +20,27 @@ function renderizarProductos() {
   });
 }
 
-// Función para mostrar el resumen del carrito
+// Funcion para cargar el carrito almacenado en el Local Storage
+function cargarCarritoDesdeLocalStorage() {
+  const carritoJSON = localStorage.getItem('carrito');
+  if (carritoJSON) {
+    carrito = JSON.parse(carritoJSON);
+  }
+}
+
+// Funcion para guardar el carrito en el LocalStorage
+function guardarCarritoEnLocalStorage() {
+  const carritoJSON = JSON.stringify(carrito);
+  localStorage.setItem('carrito', carritoJSON);
+}
+
+// Funcion para mostrar el resumen del carrito
 function mostrarResumenCarrito() {
   let resumenHTML = "";
   let totalPrecios = 0;
   let totalCantidades = 0;
 
-  // Objeto para almacenar temporalmente las cantidades de cada producto
+  // Almacena temporalmente las cantidades de cada producto
   const cantidadesTemp = {};
 
   // Recorre el carrito y calcula el precio total de cada producto
@@ -66,7 +80,7 @@ function mostrarResumenCarrito() {
   resumenCarritoElement.innerHTML = resumenHTML;
 }
 
-// Función para agregar un producto al carrito
+// Funcion para agregar un producto al carrito
 function agregarAlCarrito(idProducto) {
   const producto = PRODUCTOS.find((producto) => producto.id === idProducto);
 
@@ -106,9 +120,10 @@ function agregarAlCarrito(idProducto) {
   } else {
     alert("El producto seleccionado no existe.");
   }
+  guardarCarritoEnLocalStorage();
 }
 
-// Función para mostrar el recuadro de cantidad y configurar el botón de agregar al carrito
+// Funcion para mostrar el recuadro de cantidad y configurar el botón de agregar al carrito
 function mostrarRecuadroCantidad(idProducto) {
   const cantidadSeleccionadaElement = document.getElementById("cantidad-seleccionada");
   const comprarBtn = document.getElementById("btn-agregar-carrito");
@@ -134,7 +149,7 @@ class Producto {
   }
 }
 
-// Definición de los productos a mostrar
+// Definicion de los productos a mostrar
 const producto1 = new Producto(1, "Vestido 1", 5, 1);
 const producto2 = new Producto(2, "Vestido 2", 5, 1);
 const producto3 = new Producto(3, "Vestido 3", 5, 1);
