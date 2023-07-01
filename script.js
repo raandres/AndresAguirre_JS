@@ -9,11 +9,26 @@ function renderizarProductos() {
     let divCard = document.createElement("div");
     divCard.className =
       "col-sm-12 col-md-6 col-lg-4 mx-auto d-flex justify-content-center";
+    const productoEnCarrito = carrito.find((item) => item.id === producto.id);
     divCard.innerHTML = `
-      <div class="card text-center border-danger">
+      <div class="card text-center border-danger ${productoEnCarrito ? 'oculto' : ''}">
           <div class="titulo">${producto.descripcion}</div>
           <div class="imagen"><img src="./img/productos/producto${producto.id}.png" alt="RECIEN NACIDO"></div>
-          <button class="btn btn-primary pie_card_prod" onclick="mostrarRecuadroCantidad(${producto.id})">Comprar</button>
+          <div class="stock-precio-cantidad row align-items-center">
+            <div class="col">
+              <span id="stock-${producto.id}" class="stock">Stock: ${producto.stock}</span>
+            </div>
+            <div class="col">
+              <span class="precio">Precio: $${producto.precio.toFixed(2)}</span>
+            </div>
+            <div class="col">
+              <div class="cantidad-container">
+                <label for="cantidad-${producto.id}">Cantidad:</label>
+                <input id="cantidad-${producto.id}" type="number" min="1" max="${producto.stock}" value="1">
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary pie_card_prod" onclick="agregarAlCarrito(${producto.id})">Agregar al carrito</button>
       </div>
       `;
     cardProductos.append(divCard);
@@ -74,10 +89,23 @@ function mostrarResumenCarrito() {
       <span>$${totalPrecios.toFixed(2)}</span>
     </div>
   `;
-
   // Actualiza el contenido del elemento HTML con el resumen del carrito
   const resumenCarritoElement = document.getElementById("resumenCarrito");
   resumenCarritoElement.innerHTML = resumenHTML;
+}
+
+// Funcion para actualizar el stock en el elemento del DOM correspondiente
+function actualizarStock(idProducto, nuevoStock) {
+  const stockElement = document.getElementById(`stock-${idProducto}`);
+  stockElement.innerText = `Stock: ${nuevoStock}`;
+}
+
+// Funcion para reiniciar el stock de cada producto
+function reiniciarStock() {
+  for (const producto of PRODUCTOS) {
+    producto.stock = 5; // Coloca el stock original de cada producto
+    actualizarStock(producto.id, producto.stock);
+  }
 }
 
 // Funcion para agregar un producto al carrito
@@ -85,7 +113,7 @@ function agregarAlCarrito(idProducto) {
   const producto = PRODUCTOS.find((producto) => producto.id === idProducto);
 
   if (producto) {
-    const cantidadSeleccionada = document.getElementById("input-cantidad").value;
+    const cantidadSeleccionada = document.getElementById(`cantidad-${idProducto}`).value;
     const cantidad = parseInt(cantidadSeleccionada);
 
     if (isNaN(cantidad) || cantidad <= 0) {
@@ -100,6 +128,9 @@ function agregarAlCarrito(idProducto) {
 
     producto.stock -= cantidad;
 
+    // Actualizar el stock en el elemento del DOM correspondiente
+    actualizarStock(idProducto, producto.stock);
+
     // Busca el producto en el carrito
     const productoEnCarrito = carrito.find((item) => item.id === idProducto);
 
@@ -112,9 +143,6 @@ function agregarAlCarrito(idProducto) {
       carrito.push(producto);
     }
 
-    // Ocultar el recuadro de cantidad
-    document.getElementById("cantidad-seleccionada").style.display = "none";
-
     // Actualizar el resumen del carrito
     mostrarResumenCarrito();
   } else {
@@ -123,19 +151,56 @@ function agregarAlCarrito(idProducto) {
   guardarCarritoEnLocalStorage();
 }
 
-// Funcion para mostrar el recuadro de cantidad y configurar el botón de agregar al carrito
-function mostrarRecuadroCantidad(idProducto) {
-  const cantidadSeleccionadaElement = document.getElementById("cantidad-seleccionada");
-  const comprarBtn = document.getElementById("btn-agregar-carrito");
+// Funcion para borrar el carrito
+function borrarCarrito() {
+  carrito = [];
+  guardarCarritoEnLocalStorage();
+  mostrarResumenCarrito();
+  reiniciarStock(); // Reinicia el stock de cada producto
+}
 
-  if (cantidadSeleccionadaElement && comprarBtn) {
-    cantidadSeleccionadaElement.style.display = "block";
-    comprarBtn.onclick = function () {
-      agregarAlCarrito(idProducto);
-    };
-  } else {
-    console.error("Elemento no encontrado. Verifica el ID de los elementos HTML.");
-  }
+// Funcion para mostrar el resumen del carrito y ocultar productos
+function mostrarResumen() {
+  const productosCarrito = carrito.filter((producto) => producto.cantidad > 0);
+  const resumenHTML = productosCarrito
+    .map((producto) => {
+      const precioTotalProducto = producto.precio * producto.cantidad;
+      return `
+        <div class="producto-resumen">
+          <span class="nombre-producto">${producto.descripcion}</span>
+          <span class="cantidad-producto">${producto.cantidad}</span>
+          <span class="precio-producto">$${precioTotalProducto.toFixed(2)}</span>
+        </div>
+      `;
+    })
+    .join("");
+
+  const resumenCarritoElement = document.getElementById("resumenCarrito");
+  resumenCarritoElement.innerHTML = resumenHTML;
+
+  // Ocultar productos en el carrito y mostrar resumen
+  const productos = document.querySelectorAll(".card");
+  productos.forEach((producto) => {
+    if (!producto.classList.contains("oculto")) {
+      producto.classList.add("oculto");
+    }
+  });
+
+  const resumen = document.getElementById("resumen");
+  resumen.style.display = "block";
+}
+
+// Funcion para mostrar todos los productos y ocultar el resumen
+function mostrarProductos() {
+  const productos = document.querySelectorAll(".card");
+  productos.forEach((producto) => {
+    if (producto.classList.contains("oculto")) {
+      producto.classList.remove("oculto");
+    }
+  });
+
+  const resumen = document.getElementById("resumen");
+  resumen.style.display = "none";
 }
 
 // Estructura de productos
@@ -159,3 +224,5 @@ const producto5 = new Producto(5, "Vestido 5", 5, 1);
 const PRODUCTOS = [producto1, producto2, producto3, producto4, producto5];
 
 renderizarProductos();
+cargarCarritoDesdeLocalStorage();
+mostrarResumenCarrito();
