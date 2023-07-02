@@ -32,6 +32,11 @@ function renderizarProductos() {
     divCard.className =
       "col-sm-12 col-md-6 col-lg-4 mx-auto d-flex justify-content-center";
     const productoEnCarrito = carrito.find((item) => item.id === producto.id);
+
+    if(!productoEnCarrito){
+      divCard.classList.add("oculto");
+    }
+
     divCard.innerHTML = `
       <div class="card text-center border-danger ${productoEnCarrito ? 'oculto' : ''}">
           <div class="titulo">${producto.descripcion}</div>
@@ -114,6 +119,14 @@ function mostrarResumen() {
   // Actualiza el contenido del elemento HTML con el resumen del carrito
   const resumenCarritoElement = document.getElementById("resumenCarrito");
   resumenCarritoElement.innerHTML = resumenHTML;
+
+  // Muestra el botón "Borrar carrito"
+  const borrarCarritoBtn = document.getElementById("borrarCarritoBtn");
+  borrarCarritoBtn.style.display = "inline-block";
+
+  const btnMostrarResumen = document.getElementById("btnMostrarResumen");
+  btnMostrarResumen.style.display = "none";
+  
 }
 
 // Funcion para actualizar el stock en el elemento del DOM correspondiente
@@ -134,6 +147,12 @@ function borrarCarrito() {
   });
   mostrarResumen(); // Actualiza el resumen del carrito
   guardarCarritoEnLocalStorage(); // Guarda el carrito en el LocalStorage
+
+  const borrarCarritoBtn = document.getElementById("borrarCarritoBtn");
+  borrarCarritoBtn.style.display = "none";
+
+  const btnMostrarResumen = document.getElementById("btnMostrarResumen");
+  btnMostrarResumen.style.display = "inline-block";
 }
 
 // Funcion para agregar un producto al carrito
