@@ -2,8 +2,10 @@
 let carrito = [];
 
 // Estructura de productos
-class Producto {
-  constructor(id, descripcion, stock, precio) {
+class Producto 
+{
+  constructor(id, descripcion, stock, precio) 
+  {
     this.id = id;
     this.descripcion = descripcion;
     this.stock = stock;
@@ -24,16 +26,19 @@ const producto5 = new Producto(5, "Vestido 5", stockInicial[4], 1);
 const PRODUCTOS = [producto1, producto2, producto3, producto4, producto5];
 
 // Funcion para mostrar los productos en la pagina
-function renderizarProductos() {
+function renderizarProductos() 
+{
   const cardProductos = document.getElementById("cardProductos");
   cardProductos.className = "row";
-  PRODUCTOS.forEach((producto) => {
+  PRODUCTOS.forEach((producto) => 
+  {
     let divCard = document.createElement("div");
     divCard.className =
       "col-sm-12 col-md-6 col-lg-4 mx-auto d-flex justify-content-center";
     const productoEnCarrito = carrito.find((item) => item.id === producto.id);
 
-    if(!productoEnCarrito){
+    if(!productoEnCarrito)
+    {
       divCard.classList.add("oculto");
     }
 
@@ -63,21 +68,25 @@ function renderizarProductos() {
 }
 
 // Funcion para cargar el carrito almacenado en el Local Storage
-function cargarCarritoDesdeLocalStorage() {
+function cargarCarritoDesdeLocalStorage() 
+{
   const carritoJSON = localStorage.getItem('carrito');
-  if (carritoJSON) {
+  if (carritoJSON) 
+  {
     carrito = JSON.parse(carritoJSON);
   }
 }
 
 // Funcion para guardar el carrito en el LocalStorage
-function guardarCarritoEnLocalStorage() {
+function guardarCarritoEnLocalStorage() 
+{
   const carritoJSON = JSON.stringify(carrito);
   localStorage.setItem('carrito', carritoJSON);
 }
 
 // Funcion para mostrar el resumen del carrito
-function mostrarResumen() {
+function mostrarResumen() 
+{
   let resumenHTML = "TOTAL DE LA COMPRA";
   let totalPrecios = 0;
   let totalCantidades = 0;
@@ -86,15 +95,19 @@ function mostrarResumen() {
   const cantidadesTemp = {};
 
   // Recorre el carrito y calcula el precio total de cada producto
-  for (const producto of carrito) {
+  for (const producto of carrito) 
+  {
     const precioTotalProducto = producto.precio * producto.cantidad;
     totalPrecios += precioTotalProducto;
     totalCantidades += producto.cantidad;
 
     // Almacena temporalmente la cantidad de cada producto
-    if (producto.id in cantidadesTemp) {
+    if (producto.id in cantidadesTemp)
+    {
       cantidadesTemp[producto.id] += producto.cantidad;
-    } else {
+    }
+    else
+    {
       cantidadesTemp[producto.id] = producto.cantidad;
     }
 
@@ -111,8 +124,7 @@ function mostrarResumen() {
   // Agrega el resumen final con los totales al HTML
   resumenHTML += `
     <div class="total-resumen">
-      <span>Total</span>
-      <span>- Total de prendas: ${totalCantidades}</span>
+      <span>Total de prendas: ${totalCantidades}</span>
       <span>- Precio final: $${totalPrecios.toFixed(2)}</span>
     </div>
   `;
@@ -130,18 +142,22 @@ function mostrarResumen() {
 }
 
 // Funcion para actualizar el stock en el elemento del DOM correspondiente
-function actualizarStock(idProducto, nuevoStock) {
+function actualizarStock(idProducto, nuevoStock)
+{
   const stockElement = document.getElementById(`stock-${idProducto}`);
   stockElement.innerText = `Stock: ${nuevoStock}`;
 }
 
-function borrarCarrito() {
+function borrarCarrito()
+{
   carrito = []; // Vacía el carrito
-  for (const producto of PRODUCTOS) {
+  for (const producto of PRODUCTOS) 
+  {
     producto.stock = stockInicial[producto.id - 1]; // Coloca el stock original de cada producto
     actualizarStock(producto.id, producto.stock);
   }
-  swal.fire({
+  swal.fire(
+  {
     text: "Carrito vacío",
     icon: "success"
   });
@@ -156,20 +172,29 @@ function borrarCarrito() {
 }
 
 // Funcion para agregar un producto al carrito
-function agregarAlCarrito(idProducto) {
+function agregarAlCarrito(idProducto) 
+{
   const producto = PRODUCTOS.find((producto) => producto.id === idProducto);
 
-  if (producto) {
+  if (producto) 
+  {
     const cantidadSeleccionada = document.getElementById(`cantidad-${idProducto}`).value;
     const cantidad = parseInt(cantidadSeleccionada);
 
     if (isNaN(cantidad) || cantidad <= 0) {
-      alert("Por favor, ingrese una cantidad válida.");
+      swal.fire(
+      {
+        title: "Error",
+        text: "Por favor, ingrese una cantidad válida.",
+        icon: "error"
+      });
       return;
     }
 
-    if (cantidad > producto.stock) {
-      swal.fire({
+    if (cantidad > producto.stock) 
+    {
+      swal.fire(
+      {
         title: "Error",
         text: "No hay suficiente stock disponible.",
         icon: "error"
@@ -185,21 +210,23 @@ function agregarAlCarrito(idProducto) {
     // Busca el producto en el carrito
     const productoEnCarrito = carrito.find((item) => item.id === idProducto);
 
-    if (productoEnCarrito) {
+    if (productoEnCarrito) 
+    {
       // Actualiza la cantidad del producto en el carrito
       productoEnCarrito.cantidad += cantidad;
-    } else {
+    }
+    else 
+    {
       // Agrega el producto al carrito
       producto.cantidad = cantidad;
       carrito.push(producto);
     }
 
-    // Actualizar el resumen del carrito
-    //mostrarResumen();
     // Guarda el carrito en el LocalStorage
     guardarCarritoEnLocalStorage();
 
-    swal.fire({
+    swal.fire(
+    {
       title: "Producto agregado",
       text: "El producto ha sido agregado al carrito.",
       icon: "success"
