@@ -45,7 +45,7 @@ function renderizarProductos() {
             </div>
             <div class="col">
               <div class="cantidad-container">
-                <label for="cantidad-${producto.id}">Cantidad:</label>
+                <label for="cantidad-${producto.id}">Cant:</label>
                 <input id="cantidad-${producto.id}" type="number" min="1" max="${producto.stock}" value="1">
               </div>
             </div>
@@ -73,7 +73,7 @@ function guardarCarritoEnLocalStorage() {
 
 // Funcion para mostrar el resumen del carrito
 function mostrarResumen() {
-  let resumenHTML = "";
+  let resumenHTML = "TOTAL DE LA COMPRA";
   let totalPrecios = 0;
   let totalCantidades = 0;
 
@@ -97,8 +97,8 @@ function mostrarResumen() {
     resumenHTML += `
       <div class="producto-resumen">
         <span class="nombre-producto">${producto.descripcion}</span>
-        <span class="cantidad-producto">${cantidadesTemp[producto.id]}</span>
-        <span class="precio-producto">$${precioTotalProducto.toFixed(2)}</span>
+        <span class="cantidad-producto">- Cantidad: ${cantidadesTemp[producto.id]} unidades</span>
+        <span class="precio-producto">- Precio: $${precioTotalProducto.toFixed(2)}</span>
       </div>
     `;
   }
@@ -107,8 +107,8 @@ function mostrarResumen() {
   resumenHTML += `
     <div class="total-resumen">
       <span>Total</span>
-      <span>${totalCantidades}</span>
-      <span>$${totalPrecios.toFixed(2)}</span>
+      <span>- Total de prendas: ${totalCantidades}</span>
+      <span>- Precio final: $${totalPrecios.toFixed(2)}</span>
     </div>
   `;
   // Actualiza el contenido del elemento HTML con el resumen del carrito
