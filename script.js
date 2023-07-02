@@ -4,8 +4,7 @@ let carrito = [];
 // Estructura de productos
 class Producto 
 {
-  constructor(id, descripcion, stock, precio) 
-  {
+  constructor(id, descripcion, stock, precio) {
     this.id = id;
     this.descripcion = descripcion;
     this.stock = stock;
@@ -26,7 +25,7 @@ const producto5 = new Producto(5, "Vestido 5", stockInicial[4], 1);
 const PRODUCTOS = [producto1, producto2, producto3, producto4, producto5];
 
 // Funcion para mostrar los productos en la pagina
-function renderizarProductos() 
+function renderizarProductos()
 {
   const cardProductos = document.getElementById("cardProductos");
   cardProductos.className = "row";
@@ -36,14 +35,12 @@ function renderizarProductos()
     divCard.className =
       "col-sm-12 col-md-6 col-lg-4 mx-auto d-flex justify-content-center";
     const productoEnCarrito = carrito.find((item) => item.id === producto.id);
-
-    if(!productoEnCarrito)
+    if (!productoEnCarrito) 
     {
       divCard.classList.add("oculto");
     }
-
     divCard.innerHTML = `
-      <div class="card text-center border-danger ${productoEnCarrito ? 'oculto' : ''}">
+      <div class="card text-center border-danger ${productoEnCarrito ? "oculto" : ""}">
           <div class="titulo">${producto.descripcion}</div>
           <div class="imagen"><img src="./img/productos/producto${producto.id}.png" alt="RECIEN NACIDO"></div>
           <div class="stock-precio-cantidad row align-items-center">
@@ -61,8 +58,7 @@ function renderizarProductos()
             </div>
           </div>
           <button class="btn btn-primary pie_card_prod" onclick="agregarAlCarrito(${producto.id})">Agregar al carrito</button>
-      </div>
-      `;
+      </div> `;
     cardProductos.append(divCard);
   });
 }
@@ -70,9 +66,8 @@ function renderizarProductos()
 // Funcion para cargar el carrito almacenado en el Local Storage
 function cargarCarritoDesdeLocalStorage() 
 {
-  const carritoJSON = localStorage.getItem('carrito');
-  if (carritoJSON) 
-  {
+  const carritoJSON = localStorage.getItem("carrito");
+  if (carritoJSON) {
     carrito = JSON.parse(carritoJSON);
   }
 }
@@ -81,7 +76,7 @@ function cargarCarritoDesdeLocalStorage()
 function guardarCarritoEnLocalStorage() 
 {
   const carritoJSON = JSON.stringify(carrito);
-  localStorage.setItem('carrito', carritoJSON);
+  localStorage.setItem("carrito", carritoJSON);
 }
 
 // Funcion para mostrar el resumen del carrito
@@ -102,12 +97,10 @@ function mostrarResumen()
     totalCantidades += producto.cantidad;
 
     // Almacena temporalmente la cantidad de cada producto
-    if (producto.id in cantidadesTemp)
+    if (producto.id in cantidadesTemp) 
     {
       cantidadesTemp[producto.id] += producto.cantidad;
-    }
-    else
-    {
+    } else {
       cantidadesTemp[producto.id] = producto.cantidad;
     }
 
@@ -117,8 +110,7 @@ function mostrarResumen()
         <span class="nombre-producto">${producto.descripcion}</span>
         <span class="cantidad-producto">- Cantidad: ${cantidadesTemp[producto.id]} unidades</span>
         <span class="precio-producto">- Precio: $${precioTotalProducto.toFixed(2)}</span>
-      </div>
-    `;
+      </div> `;
   }
 
   // Agrega el resumen final con los totales al HTML
@@ -126,8 +118,7 @@ function mostrarResumen()
     <div class="total-resumen">
       <span>Total de prendas: ${totalCantidades}</span>
       <span>- Precio final: $${totalPrecios.toFixed(2)}</span>
-    </div>
-  `;
+    </div> `;
   // Actualiza el contenido del elemento HTML con el resumen del carrito
   const resumenCarritoElement = document.getElementById("resumenCarrito");
   resumenCarritoElement.innerHTML = resumenHTML;
@@ -137,18 +128,17 @@ function mostrarResumen()
   borrarCarritoBtn.style.display = "inline-block";
 
   const btnMostrarResumen = document.getElementById("btnMostrarResumen");
-  btnMostrarResumen.style.display = "none";
-  
+  btnMostrarResumen.style.display = "inline-block";
 }
 
 // Funcion para actualizar el stock en el elemento del DOM correspondiente
-function actualizarStock(idProducto, nuevoStock)
+function actualizarStock(idProducto, nuevoStock) 
 {
   const stockElement = document.getElementById(`stock-${idProducto}`);
   stockElement.innerText = `Stock: ${nuevoStock}`;
 }
 
-function borrarCarrito()
+function borrarCarrito() 
 {
   carrito = []; // Vacía el carrito
   for (const producto of PRODUCTOS) 
@@ -156,48 +146,45 @@ function borrarCarrito()
     producto.stock = stockInicial[producto.id - 1]; // Coloca el stock original de cada producto
     actualizarStock(producto.id, producto.stock);
   }
-  swal.fire(
-  {
+  swal.fire({
     text: "Carrito vacío",
-    icon: "success"
+    icon: "success",
   });
   mostrarResumen(); // Actualiza el resumen del carrito
   guardarCarritoEnLocalStorage(); // Guarda el carrito en el LocalStorage
 
-  const borrarCarritoBtn = document.getElementById("borrarCarritoBtn");
-  borrarCarritoBtn.style.display = "none";
-
   const btnMostrarResumen = document.getElementById("btnMostrarResumen");
   btnMostrarResumen.style.display = "inline-block";
+  
+  const borrarCarritoBtn = document.getElementById("borrarCarritoBtn");
+  borrarCarritoBtn.style.display = "inline-block";
+
 }
 
 // Funcion para agregar un producto al carrito
 function agregarAlCarrito(idProducto) 
 {
   const producto = PRODUCTOS.find((producto) => producto.id === idProducto);
-
   if (producto) 
   {
     const cantidadSeleccionada = document.getElementById(`cantidad-${idProducto}`).value;
     const cantidad = parseInt(cantidadSeleccionada);
-
-    if (isNaN(cantidad) || cantidad <= 0) {
-      swal.fire(
-      {
+    if (isNaN(cantidad) || cantidad <= 0) 
+    {
+      swal.fire({
         title: "Error",
         text: "Por favor, ingrese una cantidad válida.",
-        icon: "error"
+        icon: "error",
       });
       return;
     }
 
     if (cantidad > producto.stock) 
     {
-      swal.fire(
-      {
+      swal.fire({
         title: "Error",
         text: "No hay suficiente stock disponible.",
-        icon: "error"
+        icon: "error",
       });
       return;
     }
@@ -214,7 +201,7 @@ function agregarAlCarrito(idProducto)
     {
       // Actualiza la cantidad del producto en el carrito
       productoEnCarrito.cantidad += cantidad;
-    }
+    } 
     else 
     {
       // Agrega el producto al carrito
@@ -225,11 +212,10 @@ function agregarAlCarrito(idProducto)
     // Guarda el carrito en el LocalStorage
     guardarCarritoEnLocalStorage();
 
-    swal.fire(
-    {
+    swal.fire({
       title: "Producto agregado",
       text: "El producto ha sido agregado al carrito.",
-      icon: "success"
+      icon: "success",
     });
   }
 }
